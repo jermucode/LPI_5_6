@@ -77,12 +77,17 @@ char **my_readv(int fd)
 	lineCounter = 0;
 
 	lineAggregator = 0;
+	/* Read fd data in char-by-char */
 	while(read(fd, buf, BUF_SIZE) > 0)
 	{
 		//printf("%c\n", *buf);
+		
+		/* Increment lineLength until reach newline character */
 		lineLength++;
 		if(*buf == '\n')
 		{
+			/* allocate and initialize memory for the line
+			 * Also check for errors*/
 			vectorArray[lineCounter] = calloc((lineLength + 1), sizeof(char));
 			if(vectorArray[lineCounter] == NULL)
 			{
@@ -90,11 +95,17 @@ char **my_readv(int fd)
 				printf("%s\n", strerror(errno));
 				exit(EXIT_FAILURE);
 			}
+			/* lineAggregator keeps track of where in the file we are
+			 * so it allows us to always move to the beginning of the line
+			 * and we can read in the data for that line*/
 			lseek(fd, lineAggregator, SEEK_SET);
 			read(fd, vectorArray[lineCounter], lineLength);
 			lineAggregator = lineAggregator+lineLength;
+			
+			/* Linelength is set to zero for the next iteration*/
 			lineLength = 0;
 			//printf("%s", vectorArray[lineCounter]);
+			/* lineCounter moves us to start allocating for the next line*/
 			lineCounter++;
 		}
 	}
@@ -107,6 +118,7 @@ char **my_readv(int fd)
 /*
  * Main function to check that it all works and that valgrind runs through
 */
+
 
 int main(void)
 {
@@ -126,8 +138,6 @@ int main(void)
 	}
 	
 	
-	
-	
 	for(i = 0; i < 3; i++)
 	{
 		free(myvec[i]);
@@ -137,5 +147,4 @@ int main(void)
 	
 	
 }
-
 
