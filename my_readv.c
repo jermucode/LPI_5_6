@@ -102,23 +102,6 @@ char **my_readv(int fd)
 	return(vectorArray);
 
 
-	/*
-	 *The free'ing is for checking through valgrind
-	 *This is a function so we have a return value
-	 * We return the vectorArray
-	 *
-	 for(int i = 0; i < lineCounter; i++)
-	 {
-	 free(vectorArray[i]);
-	 }
-	 free(vectorArray);
-	 */
-
-	/* 
-	   exit(EXIT_SUCCESS);
-	   */
-
-
 }
 
 /*
